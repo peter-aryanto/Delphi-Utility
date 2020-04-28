@@ -32,12 +32,14 @@ implementation
 uses
   System.UITypes
   , CalculateTextAreaHeightTest.View
+  , FactoryUsingSpring.View
   ;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   FTestViewDictionary := TCollections.CreateDictionary<string,TCustomFormClass>;
 
+  AddTestView('Factory Using ''Spring''', TFactoryUsingSpringView);
   AddTestView('Text Area Height', TCalculateTextAreaHeightTestView);
 
   TestViewComboBox.ItemIndex := -1;

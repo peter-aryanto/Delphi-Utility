@@ -110,6 +110,13 @@
             <Form>CalculateTextAreaHeightTestView</Form>
         </DCCReference>
         <DCCReference Include="VclUtil.pas"/>
+        <DCCReference Include="FactoryUsingSpring.View.pas">
+            <Form>FactoryUsingSpringView</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Feature1\Feature1.pas">
+            <Form>$R *.res</Form>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
