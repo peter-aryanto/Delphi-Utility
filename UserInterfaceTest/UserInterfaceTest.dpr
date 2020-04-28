@@ -2,31 +2,17 @@ program UserInterfaceTest;
 
 uses
   Vcl.Forms,
+  Main.Form in 'Main.Form.pas' {MainForm},
   CalculateTextAreaHeightTest.View in 'CalculateTextAreaHeightTest.View.pas' {CalculateTextAreaHeightTestView},
   VclUtil in 'VclUtil.pas';
 
 {$R *.res}
-
-procedure DisplayUserInterface(const AView: TCustomFormClass);
-var
-  LView: TCustomForm;
-begin
-  LView := AView.Create(nil);
-  try
-    LView.ShowModal;
-  finally
-    LView.Free;
-  end;
-end;
 
 begin
 ReportMemoryLeaksOnShutdown := True;
 
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-
-//  Application.CreateForm(TCalculateTextAreaHeightTestView, CalculateTextAreaHeightTestView);
-  DisplayUserInterface(TCalculateTextAreaHeightTestView);
-
+  Application.CreateForm(TMainForm, MainForm);
   Application.Run;
 end.

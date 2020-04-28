@@ -1,6 +1,7 @@
 object CalculateTextAreaHeightTestView: TCalculateTextAreaHeightTestView
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'Calculate Text Area Height'
   ClientHeight = 149
   ClientWidth = 539
@@ -11,7 +12,8 @@ object CalculateTextAreaHeightTestView: TCalculateTextAreaHeightTestView
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  Position = poScreenCenter
+  PopupMode = pmAuto
+  Position = poMainFormCenter
   OnDestroy = FormDestroy
   OnShow = FormShow
   PixelsPerInch = 96
@@ -37,7 +39,7 @@ object CalculateTextAreaHeightTestView: TCalculateTextAreaHeightTestView
     Top = 35
     Width = 539
     Height = 65
-    Align = alTop
+    Align = alClient
     TabOrder = 1
     object Label1: TLabel
       Left = 16

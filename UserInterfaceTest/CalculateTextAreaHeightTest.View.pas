@@ -40,9 +40,6 @@ type
     procedure AdjustDisplay;
   end;
 
-var
-  CalculateTextAreaHeightTestView: TCalculateTextAreaHeightTestView;
-
 implementation
 
 {$R *.dfm}
