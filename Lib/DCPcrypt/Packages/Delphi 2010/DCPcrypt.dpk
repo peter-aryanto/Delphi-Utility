@@ -1,0 +1,66 @@
+package DCPcrypt;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'DCPcrypt cryptographic component library v2 BETA 3'}
+{$LIBSUFFIX '140'}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl;
+
+contains
+  DCPtypes in '..\..\Source\DCPtypes.pas',
+  DCPbase64 in '..\..\Source\DCPbase64.pas',
+  DCPblockciphers in '..\..\Source\DCPblockciphers.pas',
+  DCPconst in '..\..\Source\DCPconst.pas',
+  DCPcrypt2 in '..\..\Source\DCPcrypt2.pas',
+  DCPblowfish in '..\..\Source\Ciphers\DCPblowfish.pas',
+  DCPcast128 in '..\..\Source\Ciphers\DCPcast128.pas',
+  DCPcast256 in '..\..\Source\Ciphers\DCPcast256.pas',
+  DCPdes in '..\..\Source\Ciphers\DCPdes.pas',
+  DCPgost in '..\..\Source\Ciphers\DCPgost.pas',
+  DCPice in '..\..\Source\Ciphers\DCPice.pas',
+  DCPidea in '..\..\Source\Ciphers\DCPidea.pas',
+  DCPmars in '..\..\Source\Ciphers\DCPmars.pas',
+  DCPmisty1 in '..\..\Source\Ciphers\DCPmisty1.pas',
+  DCPrc2 in '..\..\Source\Ciphers\DCPrc2.pas',
+  DCPrc4 in '..\..\Source\Ciphers\DCPrc4.pas',
+  DCPrc5 in '..\..\Source\Ciphers\DCPrc5.pas',
+  DCPrc6 in '..\..\Source\Ciphers\DCPrc6.pas',
+  DCPrijndael in '..\..\Source\Ciphers\DCPrijndael.pas',
+  DCPtea in '..\..\Source\Ciphers\DCPtea.pas',
+  DCPtwofish in '..\..\Source\Ciphers\DCPtwofish.pas',
+  DCPhaval in '..\..\Source\Hashes\DCPhaval.pas',
+  DCPmd4 in '..\..\Source\Hashes\DCPmd4.pas',
+  DCPmd5 in '..\..\Source\Hashes\DCPmd5.pas',
+  DCPripemd128 in '..\..\Source\Hashes\DCPripemd128.pas',
+  DCPripemd160 in '..\..\Source\Hashes\DCPripemd160.pas',
+  DCPsha1 in '..\..\Source\Hashes\DCPsha1.pas',
+  DCPtiger in '..\..\Source\Hashes\DCPtiger.pas',
+  DCPreg in '..\..\Source\DCPreg.pas',
+  DCPserpent in '..\..\Source\Ciphers\DCPserpent.pas',
+  DCPsha256 in '..\..\Source\Hashes\DCPsha256.pas',
+  DCPsha512 in '..\..\Source\Hashes\DCPsha512.pas';
+
+end.
