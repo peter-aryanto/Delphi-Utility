@@ -114,9 +114,13 @@
             <Form>FactoryUsingSpringView</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Feature1\Feature1.pas">
-            <Form>$R *.res</Form>
+        <DCCReference Include="..\Feature1\Feature1.pas"/>
+        <DCCReference Include="..\Cryptography\Cryptography.pas"/>
+        <DCCReference Include="CryptographyTest.View.pas">
+            <Form>CryptographyTestView</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\Cryptography\PbkdfUtil.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

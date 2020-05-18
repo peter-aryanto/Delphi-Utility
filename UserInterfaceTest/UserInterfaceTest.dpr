@@ -6,7 +6,10 @@ uses
   CalculateTextAreaHeightTest.View in 'CalculateTextAreaHeightTest.View.pas' {CalculateTextAreaHeightTestView},
   VclUtil in 'VclUtil.pas',
   FactoryUsingSpring.View in 'FactoryUsingSpring.View.pas' {FactoryUsingSpringView},
-  Feature1 in '..\Feature1\Feature1.pas';
+  Feature1 in '..\Feature1\Feature1.pas',
+  Cryptography in '..\Cryptography\Cryptography.pas',
+  CryptographyTest.View in 'CryptographyTest.View.pas' {CryptographyTestView},
+  PbkdfUtil in '..\Cryptography\PbkdfUtil.pas';
 
 {$R *.res}
 
