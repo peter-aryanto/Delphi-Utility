@@ -120,7 +120,6 @@
             <Form>CryptographyTestView</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Cryptography\PbkdfUtil.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

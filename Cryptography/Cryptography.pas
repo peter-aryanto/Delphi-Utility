@@ -2,13 +2,6 @@ unit Cryptography;
 
 interface
 
-uses
-  System.SysUtils
-(*
-  , DCPcrypt2
-*)
-  ;
-
 type
   IHashGenerator = interface
     ['{311AAE59-B24C-401B-BABD-8B617F029246}']
@@ -20,89 +13,20 @@ type
     function GenerateHash(const APlainText: string): string;
   end;
 
-//function PBKDF2HMACSHA512(pass, salt: TBytes; count, kLen: Integer
-//  ; AHash: TDCP_hashclass
-//): TBytes;
-function Pbkdf2(
-  const AHashAlgorithmName: string;
-  const ADerivedKeyLengthInBytes: Integer;
-  const APassword: TBytes;
-  const ASalt: TBytes;
-  const AIterations: UInt64
-): TBytes; overload;
-
 implementation
 
 uses
-(*
-  PbkdfUtil
-  , IdHMACSHA1
-*)
-  System.NetEncoding
-(*
-  , DCPsha1
-  , System.Math
-*)
+  System.SysUtils
+  , System.NetEncoding
   , Winapi.Windows
   , Winapi.BCrypt
+
+  , System.Math
+  , DCPcrypt2
+  , DCPsha1
   ;
 
-{ TPbkdf2Sha1 }
-
-function TPbkdf2Sha1.GenerateHash(const APlainText: string): string;
-const
-  CBase64StringSecret =
-    'NXVFVXNvdldtM3Q5QE9IVXdeIVdaNCFaNyRzJlRSSlZYTUZJRF5tZnZUbnZQYUlDSUQ=';
-  CExpectedResult =
-    '8pmlQ5ZltechQZk/iofCz8g+jY2koMotvp0Ka5g0lfZ+nlsbnkGjuLpTmExh3g3f6PfedRW0k0tdgB0W52JRbQ==';
-var
-  LEncoding: TBase64Encoding;
-  LSalt: TBytes;
-  LPlainTextBytes: TBytes;
-  LResultBytes: TBytes;
-begin
-(*
-{
-  With the use of TBase64Encoding static methods, the default CharsPerLine will be used, resulting
-  the hash containing the line break (: '#$D#$A') after 76 characters.
-}
-  LSalt := TBase64Encoding.Base64.DecodeStringToBytes(CBase64StringSecret);
-
-{
-  The result for the alternatives below respectivly:
-  - Base64:  xRnKiJfIc+Nud9iZlpMtsu1uuR5AxhyXerVIR7XXKKWANx+F6cLR7tkP6emLA3ZSi7fkKbD2fLd0'#$D#$A'KCYYVZMkxA==
-  - Unicode: EHIMkiPyS5uy5RBjf91/DgeFzOMYZm9wq7+SRRwq0fKx7HWQiQtifT0IvjMmt1xdd3ro65IG/4m/'#$D#$A'WUCrX3lzHQ==
-  - UTF8:    8pmlQ5ZltechQZk/iofCz8g+jY2koMotvp0Ka5g0lfZ+nlsbnkGjuLpTmExh3g3f6PfedRW0k0td'#$D#$A'gB0W52JRbQ==
-}
-//  LPlainTextBytes := TBase64Encoding.Base64.DecodeStringToBytes(APlainText);
-//  LPlainTextBytes := TEncoding.Unicode.GetBytes(APlainText);
-  LPlainTextBytes := TEncoding.UTF8.GetBytes(APlainText);
-
-  LResultBytes := PBKDF2(LPlainTextBytes, LSalt, 100000, 64, TIdHMACSHA1);
-  Result := TBase64Encoding.Base64.EncodeBytesToString(LResultBytes);
-*)
-  LEncoding := TBase64Encoding.Create(Length(CExpectedResult));
-  try
-    LSalt := LEncoding.DecodeStringToBytes(CBase64StringSecret);
-    LPlainTextBytes := TEncoding.UTF8.GetBytes(APlainText);
-
-//    LResultBytes := PBKDF2(LPlainTextBytes, LSalt, 100000, 64, TIdHMACSHA1);
-//    LResultBytes := PBKDF2HMACSHA512(LPlainTextBytes, LSalt, 100000, 64, TDCP_sha1);
-    // Below, 64 bytes equal to 512 bits to match the length of BCRYPT_SHA512_ALGORITHM result.
-    LResultBytes := Pbkdf2(BCRYPT_SHA1_ALGORITHM, 64, LPlainTextBytes, LSalt, 100000);
-    Result := LEncoding.EncodeBytesToString(LResultBytes);
-  finally
-    LEncoding.Free;
-  end;
-
-  if Result = CExpectedResult then
-    Result := Result + #$D#$A'matches'
-  else
-    Result := Result + #$D#$A'does not match';
-  Result := Result + #$D#$A + CExpectedResult;
-end;
-
-{$Region 'Internal Crypto Util'}
+{$Region 'Windows BCrypt-based WinCryptographyAPIs code (minimum Windows Server 2008 R2 onwards)'}
 const
   CBCryptDll = 'bcrypt.dll';
   CPBKDF2Function = 'BCryptDeriveKeyPBKDF2';
@@ -124,16 +48,15 @@ begin
 end;
 
 function Pbkdf2(
-  const AHashAlgorithmName: string;
-  const ADerivedKeyLengthInBytes: Integer;
   const APassword: TBytes;
   const ASalt: TBytes;
-  const AIterations: UInt64
+  const AIterations: Cardinal;
+  const ADerivedKeyLengthInBytes: Cardinal;
+  const AHashAlgorithmName: string
 ): TBytes; overload;
 var
   LPBKDF2AlgorythmHandle: BCRYPT_ALG_HANDLE;
 begin
-  SetLength(Result, ADerivedKeyLengthInBytes);
   if CanUseCrytoAPI then
   begin
 {
@@ -143,7 +66,6 @@ begin
 }
     CheckBCryptResult(BCryptOpenAlgorithmProvider(
       LPBKDF2AlgorythmHandle,
-//      BCRYPT_SHA512_ALGORITHM,
       PWideChar(AHashAlgorithmName), // Alternative: @AHashAlgorithmName[1]
       nil,
       BCRYPT_ALG_HANDLE_HMAC_FLAG
@@ -168,103 +90,188 @@ begin
   end
   else
   begin
-//    Log.Info('Using internal implementation of PBKDF2-HMAC-SHA512');
-//    Result := PBKDF2HMACSHA512(
-//      APassword,
-//      ASalt,
-//      AIterations,
-//      ADerivedKeyLengthInBytes
-//    );
     raise Exception.Create('Missing windows file: bcrypt.dll');
   end;
 end;
+{$EndRegion}
 
-(*
-function CalcDigest(text: TBytes; dig: TDCP_hashclass): TBytes;
+{$Region 'Backward compatibility DCPcrypt-based code (https://keit.co/p/dcpcrypt-hmac-rfc2104/)'}
+function RPad(x: AnsiString; c: AnsiChar; s: Integer): AnsiString;
+var
+  i: Integer;
+begin
+  Result := x;
+  if Length(x) < s then
+  for i := 1 to s-Length(x) do
+    Result := Result + c;
+end;
+
+function XorBlock(s, x: AnsiString): AnsiString;
+var
+  i: Integer;
+begin
+  SetLength(Result, Length(s));
+  for i := 1 to Length(s) do
+    Result[i] := AnsiChar(Byte(s[i]) xor Byte(x[i]));
+end;
+
+function CalcDigest(text: AnsiString; dig: TDCP_hashclass): AnsiString;
 var
   x: TDCP_hash;
 begin
   x := dig.Create(nil);
   try
     x.Init;
-    x.Update(text[0], Length(text));
+    x.UpdateStr(text);
     SetLength(Result, x.GetHashSize div 8);
-    x.Final(Result[0]);
+    x.Final(Result[1]);
   finally
     x.Free;
   end;
 end;
 
-function RPad(x: TBytes; c: Byte; s: Integer): TBytes;
-begin
-  Result := x;
-  if Length(Result) < s then
-  begin
-    SetLength(Result, s);
-    FillChar(Result[length(x)], s - length(x), c);
-  end;
-end;
-
-function XorBlock(s, x: TBytes): TBytes; inline;
-var
- i: Integer;
-begin
- SetLength(Result, Length(s));
- for i := 0 to Length(s) - 1 do
-   Result[i] := Byte(s[i]) xor Byte(x[i]);
-end;
-
-function CalcHMAC(sequence, key: TBytes; hash: TDCP_hashclass): TBytes;
+function CalcHmac(AMessage, key: AnsiString; hash: TDCP_hashclass): AnsiString;
 const
-  blocksize = 128;
-var
-  o_key_pad: TBytes;
-  i_key_pad: TBytes;
+  blocksize = 64;
 begin
-  // Definition RFC 2104
   if Length(key) > blocksize then
     key := CalcDigest(key, hash);
-  key := RPad(key, 0, blocksize);
-
-  o_key_pad := XorBlock(key, RPad(nil, $5c, blocksize));
-  i_key_pad := XorBlock(key, RPad(nil, $36, blocksize));
-
-  Result := CalcDigest(Concat(o_key_pad, CalcDigest(Concat(i_key_pad, sequence), hash)), hash);
+  key := RPad(key, #0, blocksize);
+  Result := CalcDigest(XorBlock(key, RPad('', #$36, blocksize)) + AMessage, hash);
+  Result := CalcDigest(XorBlock(key, RPad('', #$5c, blocksize)) + Result, hash);
 end;
 
-function PBKDF2HMACSHA512(pass, salt: TBytes; count, kLen: Integer
-  ; AHash: TDCP_hashclass
-): TBytes;
+function Pbkdf2(
+  const APassword: AnsiString;
+  const ASalt: AnsiString;
+  const AIterations: Cardinal;
+  const ADerivedKeyLength: Cardinal;
+  const AHash: TDCP_hashclass
+): TBytes; overload;
 
-  function IntX(i: Integer): TBytes; inline;
+  function INT_32_BE(i: Integer): AnsiString;
   begin
-    SetLength(Result, 4);
-    Result[0] := Byte(i shr 24);
-    Result[1] := Byte(i shr 16);
-    Result[2] := Byte(i shr 8);
-    Result[3] := Byte(i);
+    Result := AnsiChar(i shr 24) + AnsiChar(i shr 16) + AnsiChar(i shr 8) + AnsiChar(i);
   end;
 
 var
   D, I, J: Integer;
-  T, F, U: TBytes;
+  T, F, U: ansistring;
+  LIndex: Integer;
 begin
-//  AHash := TDCP_sha512;
-  D := Ceil(kLen / (AHash.GetHashSize div 8));
+  T := '';
+  D := Ceil(ADerivedKeyLength / (AHash.GetHashSize div 8));
   for i := 1 to D do
   begin
-    F := CalcHMAC(concat(salt, IntX(i)), pass, AHash);
+    F := CalcHmac(ASalt + INT_32_BE(i), APassword, AHash);
     U := F;
-    for j := 2 to count do
+    for j := 2 to AIterations do
     begin
-      U := CalcHMAC(U, pass, AHash);
+      U := CalcHmac(U, APassword, AHash);
       F := XorBlock(F, U);
     end;
     T := T + F;
   end;
-  Result := Copy(T, 0, kLen);
+
+  SetLength(Result, ADerivedKeyLength);
+  for LIndex := 1 to ADerivedKeyLength do
+  begin
+    Result[LIndex - 1] := Byte(T[LIndex]);
+  end;
 end;
-*)
 {$EndRegion}
+
+{ TPbkdf2Sha1 }
+
+function TPbkdf2Sha1.GenerateHash(const APlainText: string): string;
+const
+  CBase64StringSecret =
+    'NXVFVXNvdldtM3Q5QE9IVXdeIVdaNCFaNyRzJlRSSlZYTUZJRF5tZnZUbnZQYUlDSUQ=';
+
+  CExpectedResult =
+    '8pmlQ5ZltechQZk/iofCz8g+jY2koMotvp0Ka5g0lfZ+nlsbnkGjuLpTmExh3g3f6PfedRW0k0tdgB0W52JRbQ==';
+
+  CNumberOfIterations = 100000;
+
+  // Below, 64 bytes equal to 512 bits to match the length of BCRYPT_SHA512_ALGORITHM result.
+  CDerivedKeyLengthInBytes = 64;
+var
+  LEncoding: TBase64Encoding;
+  LSalt: TBytes;
+  LPlainTextBytes: TBytes;
+  LResultBytes: TBytes;
+  LWinCryptographyApiResult: string;
+  LManualDCPcryptBasedCodeResult: string;
+begin
+(*
+{
+  With the use of TBase64Encoding static methods, the default CharsPerLine will be used, resulting
+  the hash containing the line break (: '#$D#$A') after 76 characters. By using either:
+  - TBase64Encoding.Create(x)
+  - TBase64Encoding.Create(0)
+  the line break can be set not to appear before x number of characters or not to appear at all.
+}
+  LSalt := TBase64Encoding.Base64.DecodeStringToBytes(CBase64StringSecret);
+
+{
+  The result for the alternatives below respectivly:
+  - Base64:  xRnKiJfIc+Nud9iZlpMtsu1uuR5AxhyXerVIR7XXKKWANx+F6cLR7tkP6emLA3ZSi7fkKbD2fLd0'#$D#$A'KCYYVZMkxA==
+  - Unicode: EHIMkiPyS5uy5RBjf91/DgeFzOMYZm9wq7+SRRwq0fKx7HWQiQtifT0IvjMmt1xdd3ro65IG/4m/'#$D#$A'WUCrX3lzHQ==
+  - UTF8:    8pmlQ5ZltechQZk/iofCz8g+jY2koMotvp0Ka5g0lfZ+nlsbnkGjuLpTmExh3g3f6PfedRW0k0td'#$D#$A'gB0W52JRbQ==
+}
+//  LPlainTextBytes := TBase64Encoding.Base64.DecodeStringToBytes(APlainText);
+//  LPlainTextBytes := TEncoding.Unicode.GetBytes(APlainText);
+  LPlainTextBytes := TEncoding.UTF8.GetBytes(APlainText);
+
+  LResultBytes := Pbkdf2(BCRYPT_SHA1_ALGORITHM, 64, LPlainTextBytes, LSalt, 100000);
+  Result := TBase64Encoding.Base64.EncodeBytesToString(LResultBytes);
+*)
+  LEncoding := TBase64Encoding.Create(0);
+  try
+    LSalt := LEncoding.DecodeStringToBytes(CBase64StringSecret);
+    LPlainTextBytes := TEncoding.UTF8.GetBytes(APlainText);
+
+    LResultBytes := Pbkdf2(
+      LPlainTextBytes,
+      LSalt,
+      CNumberOfIterations,
+      CDerivedKeyLengthInBytes,
+      BCRYPT_SHA1_ALGORITHM
+    );
+    LWinCryptographyApiResult := LEncoding.EncodeBytesToString(LResultBytes);
+
+    LResultBytes := Pbkdf2(
+      AnsiString(LPlainTextBytes),
+      AnsiString(LSalt),
+      CNumberOfIterations,
+      CDerivedKeyLengthInBytes,
+      TDCP_sha1
+    );
+    LManualDCPcryptBasedCodeResult := LEncoding.EncodeBytesToString(LResultBytes);
+
+  finally
+    LEncoding.Free;
+  end;
+
+  Result := '#1: Expected Hash';
+
+  Result := Result + #$D#$A'#2: Windows BCrypt-based WinCryptographyAPIs: ';
+  if LWinCryptographyApiResult = CExpectedResult then
+    Result := Result + 'MATCHED'
+  else
+    Result := Result + 'FAILED';
+
+  Result := Result + #$D#$A'#3: DCPcrypt-based manual calculation: ';
+  if LManualDCPcryptBasedCodeResult = CExpectedResult then
+    Result := Result + 'MATCHED'
+  else
+    Result := Result + 'FAILED';
+
+  Result := Result
+    + #$D#$A
+    + #$D#$A + '#1: ' + CExpectedResult
+    + #$D#$A + '#2: ' + LWinCryptographyApiResult
+    + #$D#$A + '#3: ' + LManualDCPcryptBasedCodeResult;
+end;
 
 end.
