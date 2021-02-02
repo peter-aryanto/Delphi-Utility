@@ -34,6 +34,7 @@ uses
   , CalculateTextAreaHeightTest.View
   , FactoryUsingSpring.View
   , CryptographyTest.View
+  , MultiColumnComboBoxTest.View
   ;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -45,6 +46,7 @@ UseLatestCommonDialogs := False;
   AddTestView('PBKDF2 and SHA1', TCryptographyTestView);
   AddTestView('Factory Using ''Spring''', TFactoryUsingSpringView);
   AddTestView('Text Area Height', TCalculateTextAreaHeightTestView);
+  AddTestView('Multi-Column Combo Box', TMultiColumnComboBoxTestView);
 
   TestViewComboBox.ItemIndex := -1;
 end;

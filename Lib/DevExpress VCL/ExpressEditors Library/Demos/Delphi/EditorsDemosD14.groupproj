@@ -1,0 +1,59 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	  <ProjectGuid>{624986FA-A7F7-4F65-944F-B4291D80BD68}</ProjectGuid>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality.12</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="TokenEditDemoD14">
+    <MSBuild Projects="TokenEditDemo\TokenEditDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="RangeControlDemoD14">
+    <MSBuild Projects="RangeControlDemo\RangeControlDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="BarCodeDemoD14">
+    <MSBuild Projects="BarCodeDemo\BarCodeDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="ActivityIndicatorDemoD14">
+    <MSBuild Projects="ActivityIndicatorDemo\ActivityIndicatorDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="AlertWindowDemoD14">
+    <MSBuild Projects="AlertWindowDemo\AlertWindowDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="AlertWindowCustomDrawDemoD14">
+    <MSBuild Projects="AlertWindowCustomDrawDemo\AlertWindowCustomDrawDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="EditorsLookupDemoD14">
+    <MSBuild Projects="EditorsLookupDemo\EditorsLookupDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="EditorsMaskDemoD14">
+    <MSBuild Projects="EditorsMaskDemo\EditorsMaskDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="EditorsStylesDemoD14">
+    <MSBuild Projects="EditorsStylesDemo\EditorsStylesDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="BreadcrumbEditDemoD14">
+    <MSBuild Projects="BreadcrumbEditDemo\BreadcrumbEditDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="DBBreadcrumbEditDemoD14">
+    <MSBuild Projects="DBBreadcrumbEditDemo\DBBreadcrumbEditDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="ShellBreadcrumbEditDemoD14">
+    <MSBuild Projects="ShellBreadcrumbEditDemo\ShellBreadcrumbEditDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="EditorsValidationDemoD14">
+    <MSBuild Projects="EditorsValidationDemo\EditorsValidationDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="ImageViewerDemoD14">
+    <MSBuild Projects="ImageViewerDemo\ImageViewerDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="ImageSliderDemoD14">
+    <MSBuild Projects="ImageSliderDemo\ImageSliderDemoD14.dproj" Targets="" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="TokenEditDemoD14;RangeControlDemoD14;BarCodeDemoD14;ActivityIndicatorDemoD14;AlertWindowDemoD14;AlertWindowCustomDrawDemoD14;EditorsLookupDemoD14;EditorsMaskDemoD14;EditorsStylesDemoD14;BreadcrumbEditDemoD14;DBBreadcrumbEditDemoD14;ShellBreadcrumbEditDemoD14;EditorsValidationDemoD14;ImageViewerDemoD14;ImageSliderDemoD14" />
+  </Target>
+</Project>

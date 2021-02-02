@@ -1,0 +1,29 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	  <ProjectGuid>{624986FA-A7F7-4F65-944F-B4291D80BD68}</ProjectGuid>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality.12</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="EditorsDemoD23">
+    <MSBuild Projects="EditorsDemo\EditorsDemoD23.dproj" Targets="" />
+  </Target>
+  <Target Name="cxEditorsDemoD23">
+    <MSBuild Projects="cxEditorsDemo\cxEditorsDemoD23.dproj" Targets="" />
+  </Target>
+  <Target Name="PuzzleDemoD23">
+    <MSBuild Projects="PuzzleDemo\PuzzleDemoD23.dproj" Targets="" />
+  </Target>
+  <Target Name="FlexibleLayoutDemoD23">
+    <MSBuild Projects="FlexibleLayoutDemo\FlexibleLayoutDemoD23.dproj" Targets="" />
+  </Target>
+  <Target Name="GroupScrollingDemoD23">
+    <MSBuild Projects="GroupScrollingDemo\GroupScrollingDemoD23.dproj" Targets="" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="EditorsDemoD23;cxEditorsDemoD23;PuzzleDemoD23;FlexibleLayoutDemoD23;GroupScrollingDemoD23" />
+  </Target>
+</Project>

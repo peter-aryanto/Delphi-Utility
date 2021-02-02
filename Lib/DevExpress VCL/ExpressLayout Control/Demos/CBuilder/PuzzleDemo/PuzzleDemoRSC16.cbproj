@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{18F95FEB-8CB2-4AB1-8464-9F3708911836}</ProjectGuid>
+    <ProjectVersion>12.2</ProjectVersion>
+    <MainSource>PuzzleDemo.cpp</MainSource>
+    <Config Condition="'$(Config)'==''">Base</Config>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+    <Base>true</Base>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Base)'!=''">
+    <Multithreaded>true</Multithreaded>
+    <AllPackageLibs>rtl.lib;vcl.lib;vclimg.lib;rtl.lib;cxLibraryRS16.lib;dxThemeRS16.lib;dxGDIPlusRS16.lib;dxCoreRS16.lib;dxLayoutControlRS16.lib;dxOfficeCoreRS16.lib;cxEditorsRS16.lib;cxDataRS16.lib;dbrtl.lib;vcldb.lib;dbrtl.lib;bdertl.lib;adortl.lib;vclx.lib;cxPageControlRS16.lib;dxmdsRS16.lib;dxComnRS16.lib;</AllPackageLibs>
+    <LinkPackageImports></LinkPackageImports>
+    <ProjectType>CppVCLApplication</ProjectType>
+    <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+   <IncludePath>$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\windows\;$(BDS)\include\windows\vcl;$(BDS)\include\windows\rtl;..\Common;..</IncludePath>
+   <ILINK_LibraryPath>$(BDS)\lib;$(BDS)\lib\win32\release;$(BDS)\lib\win32\release\psdk;..\Common;..</ILINK_LibraryPath>
+    <BCC_wpar>false</BCC_wpar>
+  </PropertyGroup>
+  <ItemGroup>
+    <ResFiles Include="PuzzleDemo.res">
+    </ResFiles>
+    <CppCompile Include="PuzzleDemo.cpp"> </CppCompile>
+    <CppCompile Include="Puzzle.cpp">
+      <Form>frmPuzzle</Form>
+    </CppCompile>
+    <FormResources Include="Puzzle.dfm" />
+  </ItemGroup>
+  <Import Project="$(BDS)\Bin\CodeGear.Cpp.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')"/>
+  <ProjectExtensions>
+    <Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+    <Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+    <BorlandProject>
+      <CPlusPlusBuilder.Personality>
+      </CPlusPlusBuilder.Personality>
+    </BorlandProject>
+    <ProjectFileVersion>12</ProjectFileVersion>
+  </ProjectExtensions>
+</Project>

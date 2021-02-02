@@ -1,0 +1,23 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+	  <ProjectGuid>{624986FA-A7F7-4F65-944F-B4291D80BD68}</ProjectGuid>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Default.Personality.12</Borland.Personality>
+    <Borland.ProjectType />
+    <BorlandProject>
+  <BorlandProject xmlns=""> <Default.Personality> </Default.Personality> </BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Target Name="cxEditorsDemoRSC20">
+    <MSBuild Projects="cxEditorsDemo\cxEditorsDemoRSC20.cbproj" Targets="" />
+  </Target>
+  <Target Name="EditorsDemoRSC20">
+    <MSBuild Projects="EditorsDemo\EditorsDemoRSC20.cbproj" Targets="" />
+  </Target>
+  <Target Name="PuzzleDemoRSC20">
+    <MSBuild Projects="PuzzleDemo\PuzzleDemoRSC20.cbproj" Targets="" />
+  </Target>
+  <Target Name="Build">
+    <CallTarget Targets="cxEditorsDemoRSC20;EditorsDemoRSC20;PuzzleDemoRSC20" />
+  </Target>
+</Project>

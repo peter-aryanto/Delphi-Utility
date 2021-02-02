@@ -1,0 +1,61 @@
+package dcldxSkinscxEditorsHelperRS23;
+
+{$R *.res}
+{$IFDEF DXDEBUGMODE}
+  {$DEBUGINFO ON}
+  {$LOCALSYMBOLS ON}
+  {$OPTIMIZATION OFF}
+  {$STACKFRAMES ON}
+{$ELSE}
+  {$DEBUGINFO OFF}
+  {$LOCALSYMBOLS OFF}
+  {$OPTIMIZATION ON}
+  {$STACKFRAMES OFF}
+{$ENDIF}
+{$ALIGN ON}
+{$ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'ExpressSkins Library Uses Clause Auto Fill Helper for ExpressEditors by Developer Express Inc.'}
+{$DESIGNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  dbrtl,
+  designide,
+  vcldesigner,
+  rtl,
+  vcl,
+  vcldb,
+  vclimg,
+  vclx,
+  dxCoreRS23,
+  dxThemeRS23,
+  cxDataRS23,
+  dxGDIPlusRS23,
+  cxLibraryRS23,
+  cxEditorsRS23,
+  dxOfficeCoreRS23,
+  dxSkinsCoreRS23,
+  dcldxCoreRS23,
+  dclcxLibraryRS23,
+  dcldxSkinsCoreRS23,
+  dcldxSkinsDesignHelperRS23;
+
+contains
+  dxSkinscxEditorsHelperReg;
+
+end.

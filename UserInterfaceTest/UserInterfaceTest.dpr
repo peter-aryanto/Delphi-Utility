@@ -8,7 +8,8 @@ uses
   FactoryUsingSpring.View in 'FactoryUsingSpring.View.pas' {FactoryUsingSpringView},
   Feature1 in '..\Feature1\Feature1.pas',
   Cryptography in '..\Cryptography\Cryptography.pas',
-  CryptographyTest.View in 'CryptographyTest.View.pas' {CryptographyTestView};
+  CryptographyTest.View in 'CryptographyTest.View.pas' {CryptographyTestView},
+  MultiColumnComboBoxTest.View in 'MultiColumnComboBoxTest.View.pas' {MultiColumnComboBoxTestView};
 
 {$R *.res}
 

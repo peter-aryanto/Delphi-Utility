@@ -1,0 +1,53 @@
+package dclcxEditorFieldLinkRS20;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'ExpressEditors FieldLink by Developer Express Inc.'}
+{$DESIGNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  dbrtl,
+  designide,
+  vcldesigner,
+  rtl,
+  vcl,
+  vcldb,
+  vclimg,
+  vclx,
+  dxCoreRS20,
+  dxThemeRS20,
+  cxDataRS20,
+  dxGDIPlusRS20,
+  cxLibraryRS20,
+  cxEditorsRS20,
+  dxOfficeCoreRS20,
+  dcldb,
+  dcldxCoreRS20,
+  dclcxLibraryRS20,
+  dclcxEditorsRS20;
+
+contains
+  cxEditorFieldLinkReg;
+
+end.

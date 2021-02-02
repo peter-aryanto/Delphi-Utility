@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{73BCB3D9-2AF7-434D-A472-5252EA48E06A}</ProjectGuid>
+    <ProjectVersion>12.2</ProjectVersion>
+    <MainSource>EditorsStylesDemo.cpp</MainSource>
+    <Config Condition="'$(Config)'==''">Base</Config>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+    <Base>true</Base>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Base)'!=''">
+    <Multithreaded>true</Multithreaded>
+    <AllPackageLibs>rtl.lib;vcl.lib;vclimg.lib;cxPageControlRS15.lib;cxGridRS15.lib;cxExportRS15.lib;dxOfficeCoreRS15.lib;cxEditorsRS15.lib;cxLibraryRS15.lib;dxGDIPlusRS15.lib;cxDataRS15.lib;dxThemeRS15.lib;vcldb.lib;dbrtl.lib;bdertl.lib;adortl.lib;vclx.lib;dxmdsRS15.lib;dxCoreRS15.lib;dxServerModeRS15.lib;dxLayoutControlRS15.lib;dxSpreadSheetRS15.lib;dxSpreadSheetCoreRS15.lib;dxSpreadSheetCoreDialogsRS15.lib;dxComnRS15.lib;</AllPackageLibs>
+    <LinkPackageImports></LinkPackageImports>
+    <ProjectType>CppVCLApplication</ProjectType>
+    <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+   <IncludePath>$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\windows\;$(BDS)\include\windows\vcl;$(BDS)\include\windows\rtl;..\Common;..</IncludePath>
+   <ILINK_LibraryPath>$(BDS)\lib;$(BDS)\lib\win32\release;$(BDS)\lib\win32\release\psdk;..\Common;..</ILINK_LibraryPath>
+    <BCC_wpar>false</BCC_wpar>
+  </PropertyGroup>
+  <ItemGroup>
+    <ResFiles Include="EditorsStylesDemo.res">
+    </ResFiles>
+    <CppCompile Include="EditorsStylesDemo.cpp"> </CppCompile>
+    <CppCompile Include="EditorsStylesDemoMain.cpp">
+      <Form>EditorsStylesDemoDemoMainForm</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoBase.cpp">
+      <Form>EditorsStylesDemoBaseFrame</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoPlanets.cpp">
+      <Form>EditorsStylesDemoPlanetsFrame</Form>
+    </CppCompile>
+    <CppCompile Include="..\AboutDemoForm.cpp">
+      <Form>formAboutDemo</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoNoteBook.cpp">
+      <Form>EditorsStylesDemoNoteBookFrame</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoIssues.cpp">
+      <Form>EditorsStylesDemoIssuesFrame</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoRichEdit.cpp">
+      <Form>EditorsStylesDemoRichEditFrame</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoConvert.cpp">
+      <Form>EditorsStylesDemoConvertFrame</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoStylesPalette.cpp">
+      <Form>EditorsStylesDemoStylesPaletteFrame</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoData.cpp">
+      <Form>EditorsStylesDemoDataDM</Form>
+    </CppCompile>
+    <CppCompile Include="EditorsStylesDemoFrameControl.cpp"> </CppCompile>
+    <CppCompile Include="EditorsStylesDemoUtils.cpp"> </CppCompile>
+    <CppCompile Include="..\BaseForm.cpp">
+      <Form>fmBaseForm</Form>
+    </CppCompile>
+    <CppCompile Include="..\DemoUtils.cpp"> </CppCompile>
+    <FormResources Include="EditorsStylesDemoMain.dfm" />
+    <FormResources Include="EditorsStylesDemoBase.dfm" />
+    <FormResources Include="EditorsStylesDemoPlanets.dfm" />
+    <FormResources Include="..\AboutDemoForm.dfm" />
+    <FormResources Include="EditorsStylesDemoNoteBook.dfm" />
+    <FormResources Include="EditorsStylesDemoIssues.dfm" />
+    <FormResources Include="EditorsStylesDemoRichEdit.dfm" />
+    <FormResources Include="EditorsStylesDemoConvert.dfm" />
+    <FormResources Include="EditorsStylesDemoStylesPalette.dfm" />
+    <FormResources Include="EditorsStylesDemoData.dfm" />
+    <FormResources Include="..\BaseForm.dfm" />
+  </ItemGroup>
+  <Import Project="$(BDS)\Bin\CodeGear.Cpp.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')"/>
+  <ProjectExtensions>
+    <Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+    <Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+    <BorlandProject>
+      <CPlusPlusBuilder.Personality>
+      </CPlusPlusBuilder.Personality>
+    </BorlandProject>
+    <ProjectFileVersion>12</ProjectFileVersion>
+  </ProjectExtensions>
+</Project>

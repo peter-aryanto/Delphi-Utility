@@ -1,0 +1,59 @@
+package dcldxAuthorizationAgentsRS18;
+
+{$R *.res}
+{$R dxAuthorizationAgentsReg.dcr}
+{$IFDEF DXDEBUGMODE}
+  {$DEBUGINFO ON}
+  {$LOCALSYMBOLS ON}
+  {$OPTIMIZATION OFF}
+  {$STACKFRAMES ON}
+{$ELSE}
+  {$DEBUGINFO OFF}
+  {$LOCALSYMBOLS OFF}
+  {$OPTIMIZATION ON}
+  {$STACKFRAMES OFF}
+{$ENDIF}
+{$ALIGN 8}
+{$ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Authorization Agents for Web Services by Developer Express Inc.'}
+{$DESIGNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  designide,
+  vcldesigner,
+  rtl,
+  vcl,
+  vclx,
+  vclie,
+  dbrtl,
+  dbexpress,
+  dxCoreRS18,
+  cxDataRS18,
+  dxThemeRS18,
+  dxGDIPlusRS18,
+  cxLibraryRS18,
+  dxOfficeCoreRS18,
+  dxAuthorizationAgentsRS18,
+  dcldxCoreRS18,
+  dclcxLibraryRS18;
+
+contains
+  dxAuthorizationAgentsReg;
+
+end.

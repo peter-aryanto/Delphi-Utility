@@ -1,0 +1,53 @@
+package dclcxEditorFieldLinkRS25;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'ExpressEditors FieldLink by Developer Express Inc.'}
+{$DESIGNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  dbrtl,
+  designide,
+  vcldesigner,
+  rtl,
+  vcl,
+  vcldb,
+  vclimg,
+  vclx,
+  dxCoreRS25,
+  dxThemeRS25,
+  cxDataRS25,
+  dxGDIPlusRS25,
+  cxLibraryRS25,
+  cxEditorsRS25,
+  dxOfficeCoreRS25,
+  dcldb,
+  dcldxCoreRS25,
+  dclcxLibraryRS25,
+  dclcxEditorsRS25;
+
+contains
+  cxEditorFieldLinkReg;
+
+end.

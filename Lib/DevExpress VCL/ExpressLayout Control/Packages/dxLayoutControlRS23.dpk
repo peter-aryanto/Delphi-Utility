@@ -1,0 +1,65 @@
+package dxLayoutControlRS23;
+
+{$R *.res}
+{$IFDEF DXDEBUGMODE}
+  {$DEBUGINFO ON}
+  {$LOCALSYMBOLS ON}
+  {$OPTIMIZATION OFF}
+  {$STACKFRAMES ON}
+{$ELSE}
+  {$DEBUGINFO OFF}
+  {$LOCALSYMBOLS OFF}
+  {$OPTIMIZATION ON}
+  {$STACKFRAMES OFF}
+{$ENDIF}
+{$ALIGN 8}
+{$ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'ExpressLayout Control by Developer Express Inc.'}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl,
+  vclimg,
+  vclx,
+  dxComnRS23,
+  dxCoreRS23,
+  dxThemeRS23,
+  cxDataRS23,
+  dxGDIPlusRS23,
+  cxLibraryRS23,
+  cxEditorsRS23,
+  dxOfficeCoreRS23,
+  cxPageControlRS23;
+
+contains
+  dxLayoutLookAndFeels,
+  dxLayoutControl,
+  dxLayoutPainters,
+  dxLayoutStrs,
+  dxLayoutContainer,
+  dxLayoutControlAdapters,
+  dxLayoutCustomizeForm,
+  dxLayoutEditForm,
+  dxLayoutDragAndDrop,
+  dxLayoutSelection,
+  dxLayoutCommon,
+  dxLayoutcxEditAdapters;
+
+end.

@@ -1,0 +1,58 @@
+package dcldxAuthorizationAgentsRS24;
+
+{$R *.res}
+{$R dxAuthorizationAgentsReg.dcr}
+{$IFDEF DXDEBUGMODE}
+  {$DEBUGINFO ON}
+  {$LOCALSYMBOLS ON}
+  {$OPTIMIZATION OFF}
+  {$STACKFRAMES ON}
+{$ELSE}
+  {$DEBUGINFO OFF}
+  {$LOCALSYMBOLS OFF}
+  {$OPTIMIZATION ON}
+  {$STACKFRAMES OFF}
+{$ENDIF}
+{$ALIGN 8}
+{$ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Authorization Agents for Web Services by Developer Express Inc.'}
+{$DESIGNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  designide,
+  vcldesigner,
+  rtl,
+  vcl,
+  vclx,
+  vclie,
+  dbrtl,
+  dxCoreRS24,
+  cxDataRS24,
+  dxThemeRS24,
+  dxGDIPlusRS24,
+  cxLibraryRS24,
+  dxOfficeCoreRS24,
+  dxAuthorizationAgentsRS24,
+  dcldxCoreRS24,
+  dclcxLibraryRS24;
+
+contains
+  dxAuthorizationAgentsReg;
+
+end.

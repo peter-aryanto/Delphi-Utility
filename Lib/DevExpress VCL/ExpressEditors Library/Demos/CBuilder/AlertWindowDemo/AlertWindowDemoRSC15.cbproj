@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{9253C2F9-A904-437C-B5A8-5CBDBDE0A364}</ProjectGuid>
+    <ProjectVersion>12.2</ProjectVersion>
+    <MainSource>AlertWindowDemo.cpp</MainSource>
+    <Config Condition="'$(Config)'==''">Base</Config>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+    <Base>true</Base>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Base)'!=''">
+    <Multithreaded>true</Multithreaded>
+    <AllPackageLibs>rtl.lib;vcl.lib;vclimg.lib;cxPageControlRS15.lib;dxOfficeCoreRS15.lib;cxEditorsRS15.lib;cxLibraryRS15.lib;dxGDIPlusRS15.lib;cxDataRS15.lib;dxThemeRS15.lib;vcldb.lib;dbrtl.lib;bdertl.lib;adortl.lib;vclx.lib;dxCoreRS15.lib;</AllPackageLibs>
+    <LinkPackageImports></LinkPackageImports>
+    <ProjectType>CppVCLApplication</ProjectType>
+    <DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+   <IncludePath>$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\windows\;$(BDS)\include\windows\vcl;$(BDS)\include\windows\rtl;..\Common;..</IncludePath>
+   <ILINK_LibraryPath>$(BDS)\lib;$(BDS)\lib\win32\release;$(BDS)\lib\win32\release\psdk;..\Common;..</ILINK_LibraryPath>
+    <BCC_wpar>false</BCC_wpar>
+  </PropertyGroup>
+  <ItemGroup>
+    <ResFiles Include="AlertWindowDemo.res">
+    </ResFiles>
+    <CppCompile Include="AlertWindowDemo.cpp"> </CppCompile>
+    <CppCompile Include="AlertWindowDemoMain.cpp">
+      <Form>AlertWindowDemoForm</Form>
+    </CppCompile>
+    <CppCompile Include="AlertWindowDemoOptions.cpp">
+      <Form>FormOptions</Form>
+    </CppCompile>
+    <CppCompile Include="..\AboutDemoForm.cpp">
+      <Form>formAboutDemo</Form>
+    </CppCompile>
+    <CppCompile Include="..\BaseForm.cpp">
+      <Form>fmBaseForm</Form>
+    </CppCompile>
+    <CppCompile Include="..\DemoUtils.cpp"> </CppCompile>
+    <FormResources Include="AlertWindowDemoMain.dfm" />
+    <FormResources Include="AlertWindowDemoOptions.dfm" />
+    <FormResources Include="..\AboutDemoForm.dfm" />
+    <FormResources Include="..\BaseForm.dfm" />
+  </ItemGroup>
+  <Import Project="$(BDS)\Bin\CodeGear.Cpp.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')"/>
+  <ProjectExtensions>
+    <Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+    <Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+    <BorlandProject>
+      <CPlusPlusBuilder.Personality>
+      </CPlusPlusBuilder.Personality>
+    </BorlandProject>
+    <ProjectFileVersion>12</ProjectFileVersion>
+  </ProjectExtensions>
+</Project>
