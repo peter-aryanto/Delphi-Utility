@@ -9,7 +9,8 @@ uses
   Feature1 in '..\Feature1\Feature1.pas',
   Cryptography in '..\Cryptography\Cryptography.pas',
   CryptographyTest.View in 'CryptographyTest.View.pas' {CryptographyTestView},
-  MultiColumnComboBoxTest.View in 'MultiColumnComboBoxTest.View.pas' {MultiColumnComboBoxTestView};
+  MultiColumnComboBoxTest.View in 'MultiColumnComboBoxTest.View.pas' {MultiColumnComboBoxTestView},
+  MultiColumnSearchLookupComboBox in '..\Lib\Internal\MultiColumnSearchLookupComboBox.pas';
 
 {$R *.res}
 

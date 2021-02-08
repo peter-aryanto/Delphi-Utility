@@ -19,6 +19,7 @@ object MultiColumnComboBoxTestView: TMultiColumnComboBoxTestView
   object cxLookupComboBox1: TcxLookupComboBox
     Left = 200
     Top = 59
+    Properties.DropDownListStyle = lsEditList
     Properties.HideSelection = False
     Properties.KeyFieldNames = 'Desc'
     Properties.ListColumns = <
@@ -28,7 +29,6 @@ object MultiColumnComboBoxTestView: TMultiColumnComboBoxTestView
       item
         FieldName = 'Desc'
       end>
-    Properties.ListFieldIndex = 1
     Properties.ListOptions.ColumnSorting = False
     Properties.ListOptions.ShowHeader = False
     TabOrder = 1

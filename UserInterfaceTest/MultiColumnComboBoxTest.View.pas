@@ -22,19 +22,39 @@ uses
   Data.DB,
   Datasnap.DBClient,
   Spring.Collections,
-  Spring.Data.ObjectDataSet;
+  Spring.Data.ObjectDataSet,
+  cxCustomData,
+  MultiColumnSearchLookupComboBox;
 
 type
   {$M+}
   TSimpleObject = class
   private
-    FId: Integer;
-    FDesc: string;
+    FSubId: Integer;
+    FSubDesc: string;
   published // These properties need to be published to support the usage of TObjectDataSet.
-    property Id: Integer read FId write FId;
+    property SubId: Integer read FSubId write FSubId;
+    property SubDesc: string read FSubDesc write FSubDesc;
+  end;
+
+  TParentObject = class
+  private
+    FId: string;
+    FDesc: string;
+    FIdDesc: string;
+    FSubObject: TSimpleObject;
+  public
+    destructor Destroy; override;
+  published // These properties need to be published to support the usage of TObjectDataSet.
+    property Id: string read FId write FId;
     property Desc: string read FDesc write FDesc;
+    property IdDesc: string read FIdDesc write FIdDesc;
+    property SubObject: TSimpleObject read FSubObject write FSubObject;
   end;
   {$M-}
+
+  TcxLookupComboBox = class(MultiColumnSearchLookupComboBox.TMultiColumnSearchLookupComboBox)
+  end;
 
   TMultiColumnComboBoxTestView = class(TForm)
     cxLookupComboBox1: TcxLookupComboBox;
@@ -46,11 +66,11 @@ type
       State: TOwnerDrawState);
   private
     FSourceClientDataSet: TClientDataSet;
-    FSourceList: IList<TSimpleObject>;
+    FSourceList: IList<TParentObject>;
     FObjectListDataSet: TObjectDataSet;
     function CreateSourceClientDataSet: TClientDataSet;
-    function CreateSourceList: IList<TSimpleObject>;
-    function CreateObjectListToDataSet(AList: IList<TSimpleObject>): TObjectDataSet;
+    function CreateSourceList: IList<TParentObject>;
+    function CreateObjectListToDataSet(AList: IList<TParentObject>): TObjectDataSet;
   end;
 
 var
@@ -65,33 +85,33 @@ uses
   MIDASLib;
 
 procedure TMultiColumnComboBoxTestView.FormShow(Sender: TObject);
+var
+  LMultiFieldSearchProperties: TMultiFieldSearchProperties;
 begin
   FSourceClientDataSet := CreateSourceClientDataSet; // Not used, replaced by FSourceList.
   FSourceList := CreateSourceList;
-  FObjectListDataSet := CreateObjectListToDataSet(FSourceList as IList<TSimpleObject>);
+  FObjectListDataSet := CreateObjectListToDataSet(FSourceList as IList<TParentObject>);
 
   ////DataSource1.DataSet := FSourceClientDataSet;
   DataSource1.DataSet := FObjectListDataSet;
 
   ////cxLookupComboBox1.Properties.ListFieldNames := 'Id;Desc';
   cxLookupComboBox1.Properties.ListSource := DataSource1;
+  LMultiFieldSearchProperties := TMultiColumnSearchLookupComboBoxProperties(
+    cxLookupComboBox1.Properties
+  ).MultiFieldSearchProperties;
+  LMultiFieldSearchProperties.IsActive := True;
+  LMultiFieldSearchProperties.FieldIndexList.Add(0);
+  LMultiFieldSearchProperties.FieldIndexList.Add(1);
 end;
 
 function TMultiColumnComboBoxTestView.CreateSourceClientDataSet: TClientDataSet;
 var
   LClientDataSet: TClientDataSet;
-//  LFieldDef: TFieldDef;
 begin
   LClientDataSet := TClientDataSet.Create(nil);
   LClientDataSet.FieldDefs.Add('Id', ftInteger);
   LClientDataSet.FieldDefs.Add('Desc', ftString, 100);
-//  LFieldDef := LClientDataSet.FieldDefs.AddFieldDef;
-//  LFieldDef.DataType := ftInteger;
-//  LFieldDef.Desc := 'Id';
-//  LFieldDef := LClientDataSet.FieldDefs.AddFieldDef;
-//  LFieldDef.DataType := ftString;
-//  LFieldDef.Size := 100;
-//  LFieldDef.Desc := 'Desc';
   LClientDataSet.CreateDataSet;
   LClientDataSet.Insert;
   LClientDataSet.FieldByName('Id').AsInteger := 1;
@@ -105,34 +125,53 @@ begin
   Result := LClientDataSet;
 end;
 
-function TMultiColumnComboBoxTestView.CreateSourceList: IList<TSimpleObject>;
+function TMultiColumnComboBoxTestView.CreateSourceList: IList<TParentObject>;
 var
-  LList: IList<TSimpleObject>;
+  LList: IList<TParentObject>;
   LSimpleObject: TSimpleObject;
+  LParentObject: TParentObject;
 begin
-  LList := Spring.Collections.TCollections.CreateList<TSimpleObject>(True);
+  LList := Spring.Collections.TCollections.CreateList<TParentObject>(True);
   LSimpleObject := TSimpleObject.Create;
-  LSimpleObject.Id := 1;
-  LSimpleObject.Desc := 'One';
-  LList.Add(LSimpleObject);
+  LSimpleObject.SubId := 11;
+  LSimpleObject.SubDesc := 'Eleven';
+  LParentObject := TParentObject.Create;
+  LParentObject.Id := '10001';
+  LParentObject.Desc := 'One';
+  LParentObject.IdDesc := LParentObject.Id + LParentObject.Desc;
+  LParentObject.SubObject := LSimpleObject;
+  LList.Add(LParentObject);
   LSimpleObject := TSimpleObject.Create;
-  LSimpleObject.Id := 2;
-  LSimpleObject.Desc := 'Two';
-  LList.Add(LSimpleObject);
+  LSimpleObject.SubId := 22;
+  LSimpleObject.SubDesc := 'Twenty Two';
+  LParentObject := TParentObject.Create;
+  LParentObject.Id := '80002';
+  LParentObject.Desc := 'Two';
+  LParentObject.IdDesc := LParentObject.Id + LParentObject.Desc;
+  LParentObject.SubObject := LSimpleObject;
+  LList.Add(LParentObject);
+  LParentObject := TParentObject.Create;
+  LParentObject.Id := '10003';
+  LParentObject.Desc := '8Three';
+  LParentObject.IdDesc := LParentObject.Id + LParentObject.Desc;
+  LList.Add(LParentObject);
 
   Result := LList;
 end;
 
 function TMultiColumnComboBoxTestView.CreateObjectListToDataSet(
-  AList: IList<TSimpleObject>
+  AList: IList<TParentObject>
 ): TObjectDataSet;
 var
   LObjectListDataSet: TObjectDataSet;
 begin
   LObjectListDataSet := TObjectDataSet.Create(nil);
   LObjectListDataSet.DataList := AList as IObjectList;
-  LObjectListDataSet.FieldDefs.Add('Id', ftInteger);
+  LObjectListDataSet.FieldDefs.Add('Id', ftString, 100);
   LObjectListDataSet.FieldDefs.Add('Desc', ftString, 100);
+  LObjectListDataSet.FieldDefs.Add('IdDesc', ftString, 200);
+  LObjectListDataSet.FieldDefs.Add('SubId', ftInteger);
+  LObjectListDataSet.FieldDefs.Add('SubDesc', ftString, 100);
   LObjectListDataSet.Active := True;
 
   Result := LObjectListDataSet;
@@ -151,7 +190,6 @@ begin
     DrawRect:= Rect;
     OffsetRect(DrawRect,1,0);
     DrawRect.Right:= DrawRect.Right - DrawRect.Width div 2;
-    ////DrawText(DC, IntToStr(Index + 1), Length(IntToStr(Index + 1)), DrawRect, 0);
     DrawText(DC, IntToStr(Index + 1), Length(IntToStr(Index + 1)), DrawRect, 0);
   end;
   //if ColCount > 1 then
@@ -159,7 +197,6 @@ begin
     DrawRect:= Rect;
     OffsetRect(DrawRect,1,0);
     DrawRect.Left:= DrawRect.Left + DrawRect.Width div 2;
-    ////DrawText(DC, ComboBox1.Items[Index], Length(ComboBox1.Items[Index]), DrawRect, 0);
     DrawText(DC, ComboBox1.Items[Index], Length(ComboBox1.Items[Index]), DrawRect, 0);
   end;
 end;
@@ -168,6 +205,14 @@ procedure TMultiColumnComboBoxTestView.FormClose(Sender: TObject; var Action: TC
 begin
   FObjectListDataSet.Free;
   FSourceClientDataSet.Free;
+end;
+
+{ TParentObject }
+
+destructor TParentObject.Destroy;
+begin
+  FSubObject.Free;
+  inherited Destroy;
 end;
 
 end.
