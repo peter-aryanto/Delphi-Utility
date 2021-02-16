@@ -10,7 +10,8 @@ uses
   Cryptography in '..\Cryptography\Cryptography.pas',
   CryptographyTest.View in 'CryptographyTest.View.pas' {CryptographyTestView},
   MultiColumnComboBoxTest.View in 'MultiColumnComboBoxTest.View.pas' {MultiColumnComboBoxTestView},
-  MultiColumnSearchLookupComboBox in '..\Lib\Internal\MultiColumnSearchLookupComboBox.pas';
+  MultiColumnSearchLookupComboBox in '..\Lib\Internal\MultiColumnSearchLookupComboBox.pas',
+  JsonObjectConverterTest.View in 'JsonObjectConverterTest.View.pas' {JsonObjectConverterTestView};
 
 {$R *.res}
 

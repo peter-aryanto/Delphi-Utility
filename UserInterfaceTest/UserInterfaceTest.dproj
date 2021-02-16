@@ -125,6 +125,10 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Lib\Internal\MultiColumnSearchLookupComboBox.pas"/>
+        <DCCReference Include="JsonObjectConverterTest.View.pas">
+            <Form>JsonObjectConverterTestView</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
