@@ -27,14 +27,14 @@ type
     FMainObjectId: Integer;
     FMainObjectDesc: string;
     FSubObject: TSubObject;
+    FSubObjectList: IList<TSubObject>;
   public
     destructor Destroy; override;
     property MainObjectId: Integer read FMainObjectId write FMainObjectId;
     property MainObjectDesc: string read FMainObjectDesc write FMainObjectDesc;
     property SubObject: TSubObject read FSubObject write FSubObject;
+    property SubObjectList: IList<TSubObject> read FSubObjectList write FSubObjectList;
   end;
-
-  TMainObjectClass = class of TMainObject;
   {$M-}
 
   TJsonObjectConverterTestView = class(TForm)
@@ -48,6 +48,10 @@ type
     FMainObjectList: IList<TMainObject>;
     function GenerateMainObjectListJsonString(ACount: Integer): string;
     function GenerateSubObjectJsonString(AIdAsString: string): string;
+    function GenerateSubObjectListJsonString(AIdAsString: string): string;
+    function JsonArrayToSubObjectList(
+      AJsonArray: TJSONArray
+    ): IList<TSubObject>;
     procedure DisplayObjectProperties;
   end;
 
@@ -80,7 +84,6 @@ var
   LCounterString: string;
   LMainObjectJsonString: string;
 begin
-  Result := '[';
   for LCounter := 1 to ACount do
   begin
     LCounterString := IntToStr(LCounter);
@@ -89,10 +92,11 @@ begin
       + '"MainObjectId":' + LCounterString
       + ',"MainObjectDesc":"MainObject' + LCounterString + '"'
       + ',"SubObject":' + GenerateSubObjectJsonString(LCounterString)
+      + ',"SubObjectList":' + GenerateSubObjectListJsonString(LCounterString)
       + '}';
     Result := Result + LMainObjectJsonString;
   end;
-  Result := Result + ']';
+  Result := '[' + Result + ']';
 end;
 
 function TJsonObjectConverterTestView.GenerateSubObjectJsonString(AIdAsString: string): string;
@@ -104,6 +108,23 @@ begin
     + '}';
 end;
 
+function TJsonObjectConverterTestView.GenerateSubObjectListJsonString(AIdAsString: string): string;
+begin
+  Result :=
+    '{'
+    + '"SubObjectId":' + AIdAsString
+    + ',"SubObjectDesc":"SubObject' + AIdAsString + 'A"'
+    + '}';
+
+  Result := Result +
+    ',{'
+    + '"SubObjectId":' + AIdAsString
+    + ',"SubObjectDesc":"SubObject' + AIdAsString + 'B"'
+    + '}';
+
+  Result := '[' + Result + ']'
+end;
+
 procedure TJsonObjectConverterTestView.ConvertButtonClick(Sender: TObject);
 var
   LStopWatch: TStopWatch;
@@ -111,8 +132,8 @@ var
   LJsonArray: TJSONArray;
   LJsonArrayElement: TJSONValue;
   LMainObject: TMainObject;
-  LSubObjectJsonString: string;
-  LSubObjectJsonValue: TSubObject;
+//  LSubObjectJson: TJSONObject;
+  LSubObjectJsonArray: TJSONArray;
 begin
   FMainObjectList := nil;
 
@@ -123,7 +144,18 @@ begin
   LJsonArray := LJsonValue as TJSONArray;
   for LJsonArrayElement in LJsonArray do
   begin
-    LMainObject := TJson.JsonToObject<TMainObject>(LJsonArrayElement.ToJSON);
+//    LMainObject := TJson.JsonToObject<TMainObject>(LJsonArrayElement.ToJSON);
+    LMainObject := TMainObject.Create;
+    LMainObject.MainObjectId := LJsonArrayElement.GetValue('MainObjectId', 0);
+    LMainObject.MainObjectDesc := LJsonArrayElement.GetValue('MainObjectDesc', '');
+
+//    LSubObjectJson := LJsonArrayElement.GetValue<TJSONObject>('SubObject', nil);
+    LMainObject.SubObject := TSubObject.Create;
+    LMainObject.SubObject.SubObjectId := LJsonArrayElement.GetValue('SubObject.SubObjectId', 0);
+    LMainObject.SubObject.SubObjectDesc := LJsonArrayElement.GetValue('SubObject.SubObjectDesc', '');
+
+    LSubObjectJsonArray := LJsonArrayElement.GetValue<TJSONArray>('SubObjectList', nil);
+    LMainObject.FSubObjectList := JsonArrayToSubObjectList(LSubObjectJsonArray);
     FMainObjectList.Add(LMainObject);
   end;
   LJsonValue.Free;
@@ -132,9 +164,25 @@ begin
   ResultRichEdit.Lines.Insert(0, 'Completed in ' + IntToStr(LStopWatch.Elapsed.Seconds) + 's');
 end;
 
+function TJsonObjectConverterTestView.JsonArrayToSubObjectList(
+  AJsonArray: TJSONArray
+): IList<TSubObject>;
+var
+  LJsonArrayElement: TJSONValue;
+  LListElementObject: TSubObject;
+begin
+  Result := TCollections.CreateObjectList<TSubObject>;
+  for LJsonArrayElement in AJsonArray do
+  begin
+    LListElementObject := TJson.JsonToObject<TSubObject>(LJsonArrayElement.ToJSON);
+    Result.Add(LListElementObject);
+  end;
+end;
+
 procedure TJsonObjectConverterTestView.DisplayObjectProperties;
 var
   LMainObject: TMainObject;
+  LSubObject: TSubObject;
 begin
   ResultRichEdit.Clear;
 
@@ -144,6 +192,12 @@ begin
     ResultRichEdit.Lines.Add('"MainObjectDesc":"' + LMainObject.MainObjectDesc + '"');
     ResultRichEdit.Lines.Add('    "SubObjectId":' + IntToStr(LMainObject.SubObject.SubObjectId));
     ResultRichEdit.Lines.Add('    "SubObjectDesc":"' + LMainObject.SubObject.SubObjectDesc+ '"');
+    ResultRichEdit.Lines.Add('    "SubObjectList":');
+    for LSubObject in LMainObject.SubObjectList do
+    begin
+      ResultRichEdit.Lines.Add('        "SubObjectId":' + IntToStr(LSubObject.SubObjectId));
+      ResultRichEdit.Lines.Add('        "SubObjectDesc":"' + LSubObject.SubObjectDesc+ '"');
+    end;
   end;
 end;
 
