@@ -4,17 +4,13 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls
   , REST.Json, System.JSON
 //  , Spring.Collections, Spring.Collections.Lists;
   , System.Generics.Collections;
 
 const
   CMainObjectJsonString = '{"MainObjectId":1,"MainObjectDesc":"MainObject1"}';
-  CMainObjectListJsonString = '['
-    + '{"MainObjectId":1,"MainObjectDesc":"MainObject1"}'
-    + ',{"MainObjectId":2,"MainObjectDesc":"MainObject2"}'
-    + ']';
 
 type
   {$M+}
@@ -32,17 +28,17 @@ type
 
   TJsonObjectConverterTestView = class(TForm)
     ConvertButton: TButton;
-    ResultMemo: TMemo;
+    ResultRichEdit: TRichEdit;
     procedure FormShow(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ConvertButtonClick(Sender: TObject);
-    procedure DisplayObjectProperties;
   private
-    FMainObject: TMainObject;
+//    FMainObject: TMainObject;
+    FMainObjectListJsonString: string;
     FMainObjectList: TList<TMainObject>;
-    procedure FreeListElement(AList: TList<TMainObject>);//; AClassOfT: TClass);
-  public
-    { Public declarations }
+    function GenerateMainObjectListJsonString(ACount: Integer): string;
+    procedure FreeListElement<T>(AList: TList<T>; AClassOfT: TClass = nil);
+    procedure DisplayObjectProperties;
   end;
 
 var
@@ -52,21 +48,25 @@ implementation
 
 {$R *.dfm}
 
+uses
+  System.StrUtils;
+
 procedure TJsonObjectConverterTestView.FormShow(Sender: TObject);
 begin
-  ResultMemo.Text := CMainObjectJsonString;
+  FMainObjectListJsonString := GenerateMainObjectListJsonString(120);
+  ResultRichEdit.Lines.Text := FMainObjectListJsonString;
 end;
 
 procedure TJsonObjectConverterTestView.FormDestroy(Sender: TObject);
 begin
-  FMainObject.Free;
-  FreeListElement(FMainObjectList);//, TMainObjectClass);
+//  FMainObject.Free;
+  FreeListElement<TMainObject>(FMainObjectList, TMainObject);
   FMainObjectList.Free;
 end;
 
-procedure TJsonObjectConverterTestView.FreeListElement(AList: TList<TMainObject>);//; AClassOfT: TClass);
+procedure TJsonObjectConverterTestView.FreeListElement<T>(AList: TList<T>; AClassOfT: TClass = nil);
 var
-  LElement: TMainObject;
+  LElement: T;
 begin
   if not Assigned(AList) then
   begin
@@ -76,40 +76,51 @@ begin
   for LElement in AList do
   begin
 
-//    if LElement is TObject then
+    if AClassOfT <> nil then
     begin
-//      (LElement as AClassOfT).Free;
-//      (LElement as TObject).Free;
-      LElement.Free;
+       (LElement as AClassOfT).Free;
     end;
 
   end;
 end;
 
+function TJsonObjectConverterTestView.GenerateMainObjectListJsonString(ACount: Integer): string;
+var
+  LCounter: Integer;
+  LCounterString: string;
+  LMainObjectJsonString: string;
+begin
+  Result := '[';
+  for LCounter := 1 to ACount do
+  begin
+    LCounterString := IntToStr(LCounter);
+    LMainObjectJsonString := IfThen(LCounter > 1, ',')
+      + '{"MainObjectId":' + LCounterString
+      + ',"MainObjectDesc":"MainObject' + LCounterString + '"}';
+    Result := Result + LMainObjectJsonString;
+  end;
+  Result := Result + ']';
+end;
+
 procedure TJsonObjectConverterTestView.ConvertButtonClick(Sender: TObject);
 var
+  LMainObjectListJsonString: string;
   LJsonValue: TJSONValue;
   LJsonArray: TJSONArray;
   LJsonArrayElement: TJSONValue;
   LMainObject: TMainObject;
 begin
-  FMainObject.Free;
-  FMainObject := nil;
-//  if Assigned(FMainObjectList) then
-//  begin
-//    for LMainObject in FMainObjectList do
-//    begin
-//      LMainObject.Free;
-//    end;
-//  end;
-  FreeListElement(FMainObjectList);//, TMainObjectClass);
+//  FMainObject.Free;
+//  FMainObject := nil;
+  FreeListElement<TMainObject>(FMainObjectList, TMainObject);
   FMainObjectList.Free;
   FMainObjectList := nil;
 
+  LMainObjectListJsonString := FMainObjectListJsonString;
+
 //  FMainObject := TJson.JsonToObject<TMainObject>(CMainObjectJsonString);
-//  FMainObjectList := TJson.JsonToObject<TList<TMainObject>>(CMainObjectListJsonString);
   FMainObjectList := TList<TMainObject>.Create;
-  LJsonValue := TJSONObject.ParseJSONValue(CMainObjectListJsonString);
+  LJsonValue := TJSONObject.ParseJSONValue(LMainObjectListJsonString);
   LJsonArray := LJsonValue as TJSONArray;
   for LJsonArrayElement in LJsonArray do
   begin
@@ -127,14 +138,14 @@ procedure TJsonObjectConverterTestView.DisplayObjectProperties;
 var
   LMainObject: TMainObject;
 begin
-  ResultMemo.Clear;
+  ResultRichEdit.Clear;
 
-//  ResultMemo.Lines.Add('"MainObjectId":' + IntToStr(FMainObject.MainObjectId));
-//  ResultMemo.Lines.Add('"MainObjectDesc":"' + FMainObject.MainObjectDesc + '"');
+//  ResultRichEdit.Lines.Add('"MainObjectId":' + IntToStr(FMainObject.MainObjectId));
+//  ResultRichEdit.Lines.Add('"MainObjectDesc":"' + FMainObject.MainObjectDesc + '"');
   for LMainObject in FMainObjectList do
   begin
-    ResultMemo.Lines.Add('"MainObjectId":' + IntToStr(LMainObject.MainObjectId));
-    ResultMemo.Lines.Add('"MainObjectDesc":"' + LMainObject.MainObjectDesc + '"');
+    ResultRichEdit.Lines.Add('"MainObjectId":' + IntToStr(LMainObject.MainObjectId));
+    ResultRichEdit.Lines.Add('"MainObjectDesc":"' + LMainObject.MainObjectDesc + '"');
   end;
 end;
 

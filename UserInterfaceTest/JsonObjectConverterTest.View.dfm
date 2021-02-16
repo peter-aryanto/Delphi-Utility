@@ -14,25 +14,37 @@ object JsonObjectConverterTestView: TJsonObjectConverterTestView
   Position = poOwnerFormCenter
   OnDestroy = FormDestroy
   OnShow = FormShow
+  DesignSize = (
+    505
+    231)
   PixelsPerInch = 96
   TextHeight = 13
   object ConvertButton: TButton
-    Left = 25
-    Top = 12
+    Left = 24
+    Top = 8
     Width = 75
     Height = 25
     Caption = 'To Object'
     TabOrder = 0
     OnClick = ConvertButtonClick
   end
-  object ResultMemo: TMemo
-    Left = 25
-    Top = 48
-    Width = 456
-    Height = 175
+  object ResultRichEdit: TRichEdit
+    Left = 8
+    Top = 43
+    Width = 489
+    Height = 180
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
     Lines.Strings = (
-      'ResultMemo')
+      '')
+    ParentFont = False
     ReadOnly = True
+    ScrollBars = ssBoth
     TabOrder = 1
+    Zoom = 100
   end
 end

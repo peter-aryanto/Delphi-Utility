@@ -35,6 +35,7 @@ uses
   , FactoryUsingSpring.View
   , CryptographyTest.View
   , MultiColumnComboBoxTest.View
+  , JsonObjectConverterTest.View
   ;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -47,6 +48,7 @@ UseLatestCommonDialogs := False;
   AddTestView('Factory Using ''Spring''', TFactoryUsingSpringView);
   AddTestView('Text Area Height', TCalculateTextAreaHeightTestView);
   AddTestView('Multi-Column Combo Box', TMultiColumnComboBoxTestView);
+  AddTestView('JSON Deserialiser', TJsonObjectConverterTestView);
 
   TestViewComboBox.ItemIndex := -1;
 end;
