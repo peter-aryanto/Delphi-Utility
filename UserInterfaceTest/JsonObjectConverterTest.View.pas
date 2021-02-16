@@ -13,13 +13,25 @@ const
 
 type
   {$M+}
+  TSubObject = class
+  private
+    FSubObjectId: Integer;
+    FSubObjectDesc: string;
+  public
+    property SubObjectId: Integer read FSubObjectId write FSubObjectId;
+    property SubObjectDesc: string read FSubObjectDesc write FSubObjectDesc;
+  end;
+
   TMainObject = class
   private
     FMainObjectId: Integer;
     FMainObjectDesc: string;
+    FSubObject: TSubObject;
   public
+    destructor Destroy; override;
     property MainObjectId: Integer read FMainObjectId write FMainObjectId;
     property MainObjectDesc: string read FMainObjectDesc write FMainObjectDesc;
+    property SubObject: TSubObject read FSubObject write FSubObject;
   end;
 
   TMainObjectClass = class of TMainObject;
@@ -35,6 +47,7 @@ type
     FMainObjectListJsonString: string;
     FMainObjectList: IList<TMainObject>;
     function GenerateMainObjectListJsonString(ACount: Integer): string;
+    function GenerateSubObjectJsonString(AIdAsString: string): string;
     procedure DisplayObjectProperties;
   end;
 
@@ -46,7 +59,9 @@ implementation
 {$R *.dfm}
 
 uses
-  System.StrUtils;
+  System.StrUtils
+  , System.Diagnostics
+  ;
 
 procedure TJsonObjectConverterTestView.FormShow(Sender: TObject);
 begin
@@ -70,38 +85,51 @@ begin
   begin
     LCounterString := IntToStr(LCounter);
     LMainObjectJsonString := IfThen(LCounter > 1, ',')
-      + '{"MainObjectId":' + LCounterString
-      + ',"MainObjectDesc":"MainObject' + LCounterString + '"}';
+      + '{'
+      + '"MainObjectId":' + LCounterString
+      + ',"MainObjectDesc":"MainObject' + LCounterString + '"'
+      + ',"SubObject":' + GenerateSubObjectJsonString(LCounterString)
+      + '}';
     Result := Result + LMainObjectJsonString;
   end;
   Result := Result + ']';
 end;
 
+function TJsonObjectConverterTestView.GenerateSubObjectJsonString(AIdAsString: string): string;
+begin
+  Result :=
+    '{'
+    + '"SubObjectId":' + AIdAsString
+    + ',"SubObjectDesc":"SubObject' + AIdAsString + '"'
+    + '}';
+end;
+
 procedure TJsonObjectConverterTestView.ConvertButtonClick(Sender: TObject);
 var
-  LMainObjectListJsonString: string;
+  LStopWatch: TStopWatch;
   LJsonValue: TJSONValue;
   LJsonArray: TJSONArray;
   LJsonArrayElement: TJSONValue;
   LMainObject: TMainObject;
+  LSubObjectJsonString: string;
+  LSubObjectJsonValue: TSubObject;
 begin
   FMainObjectList := nil;
 
-  LMainObjectListJsonString := FMainObjectListJsonString;
+  LStopWatch := TStopWatch.StartNew;
 
   FMainObjectList := TCollections.CreateObjectList<TMainObject>;
-  LJsonValue := TJSONObject.ParseJSONValue(LMainObjectListJsonString);
+  LJsonValue := TJSONObject.ParseJSONValue(FMainObjectListJsonString);
   LJsonArray := LJsonValue as TJSONArray;
   for LJsonArrayElement in LJsonArray do
   begin
-    LMainObject := TMainObject.Create;
-    LMainObject.MainObjectId := LJsonArrayElement.GetValue('MainObjectId', 0);
-    LMainObject.MainObjectDesc := LJsonArrayElement.GetValue('MainObjectDesc', '');
+    LMainObject := TJson.JsonToObject<TMainObject>(LJsonArrayElement.ToJSON);
     FMainObjectList.Add(LMainObject);
   end;
-  DisplayObjectProperties;
-
   LJsonValue.Free;
+
+  DisplayObjectProperties;
+  ResultRichEdit.Lines.Insert(0, 'Completed in ' + IntToStr(LStopWatch.Elapsed.Seconds) + 's');
 end;
 
 procedure TJsonObjectConverterTestView.DisplayObjectProperties;
@@ -114,7 +142,17 @@ begin
   begin
     ResultRichEdit.Lines.Add('"MainObjectId":' + IntToStr(LMainObject.MainObjectId));
     ResultRichEdit.Lines.Add('"MainObjectDesc":"' + LMainObject.MainObjectDesc + '"');
+    ResultRichEdit.Lines.Add('    "SubObjectId":' + IntToStr(LMainObject.SubObject.SubObjectId));
+    ResultRichEdit.Lines.Add('    "SubObjectDesc":"' + LMainObject.SubObject.SubObjectDesc+ '"');
   end;
+end;
+
+{ TMainObject }
+
+destructor TMainObject.Destroy;
+begin
+  FSubObject.Free;
+  inherited Destroy;
 end;
 
 end.
