@@ -6,8 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls
   , REST.Json, System.JSON
-//  , Spring.Collections, Spring.Collections.Lists;
-  , System.Generics.Collections;
+  , Spring.Collections, Spring.Collections.Lists;
 
 const
   CMainObjectJsonString = '{"MainObjectId":1,"MainObjectDesc":"MainObject1"}';
@@ -33,11 +32,9 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure ConvertButtonClick(Sender: TObject);
   private
-//    FMainObject: TMainObject;
     FMainObjectListJsonString: string;
-    FMainObjectList: TList<TMainObject>;
+    FMainObjectList: IList<TMainObject>;
     function GenerateMainObjectListJsonString(ACount: Integer): string;
-    procedure FreeListElement<T>(AList: TList<T>; AClassOfT: TClass = nil);
     procedure DisplayObjectProperties;
   end;
 
@@ -59,29 +56,7 @@ end;
 
 procedure TJsonObjectConverterTestView.FormDestroy(Sender: TObject);
 begin
-//  FMainObject.Free;
-  FreeListElement<TMainObject>(FMainObjectList, TMainObject);
-  FMainObjectList.Free;
-end;
-
-procedure TJsonObjectConverterTestView.FreeListElement<T>(AList: TList<T>; AClassOfT: TClass = nil);
-var
-  LElement: T;
-begin
-  if not Assigned(AList) then
-  begin
-    Exit;
-  end;
-
-  for LElement in AList do
-  begin
-
-    if AClassOfT <> nil then
-    begin
-       (LElement as AClassOfT).Free;
-    end;
-
-  end;
+  //FMainObjectList := nil;
 end;
 
 function TJsonObjectConverterTestView.GenerateMainObjectListJsonString(ACount: Integer): string;
@@ -110,16 +85,11 @@ var
   LJsonArrayElement: TJSONValue;
   LMainObject: TMainObject;
 begin
-//  FMainObject.Free;
-//  FMainObject := nil;
-  FreeListElement<TMainObject>(FMainObjectList, TMainObject);
-  FMainObjectList.Free;
   FMainObjectList := nil;
 
   LMainObjectListJsonString := FMainObjectListJsonString;
 
-//  FMainObject := TJson.JsonToObject<TMainObject>(CMainObjectJsonString);
-  FMainObjectList := TList<TMainObject>.Create;
+  FMainObjectList := TCollections.CreateObjectList<TMainObject>;
   LJsonValue := TJSONObject.ParseJSONValue(LMainObjectListJsonString);
   LJsonArray := LJsonValue as TJSONArray;
   for LJsonArrayElement in LJsonArray do
@@ -140,8 +110,6 @@ var
 begin
   ResultRichEdit.Clear;
 
-//  ResultRichEdit.Lines.Add('"MainObjectId":' + IntToStr(FMainObject.MainObjectId));
-//  ResultRichEdit.Lines.Add('"MainObjectDesc":"' + FMainObject.MainObjectDesc + '"');
   for LMainObject in FMainObjectList do
   begin
     ResultRichEdit.Lines.Add('"MainObjectId":' + IntToStr(LMainObject.MainObjectId));
