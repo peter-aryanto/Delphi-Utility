@@ -35,6 +35,20 @@ type
     property SubObject: TSubObject read FSubObject write FSubObject;
     property SubObjectList: IList<TSubObject> read FSubObjectList write FSubObjectList;
   end;
+
+  IJsonUtils<T> = interface
+    ['{D8E422DC-7034-4AFF-B3DD-4B84A39FBDFF}']
+    function JsonArrayToList(
+      AJsonArray: TJSONArray
+    ): IList<T>;
+  end;
+
+  TJsonUtils<T: class, constructor> = class(TInterfacedObject, IJsonUtils<T>)
+  private
+    function JsonArrayToList(
+      AJsonArray: TJSONArray
+    ): IList<T>;
+  end;
   {$M-}
 
   TJsonObjectConverterTestView = class(TForm)
@@ -49,9 +63,6 @@ type
     function GenerateMainObjectListJsonString(ACount: Integer): string;
     function GenerateSubObjectJsonString(AIdAsString: string): string;
     function GenerateSubObjectListJsonString(AIdAsString: string): string;
-    function JsonArrayToSubObjectList(
-      AJsonArray: TJSONArray
-    ): IList<TSubObject>;
     procedure DisplayObjectProperties;
   end;
 
@@ -134,6 +145,7 @@ var
   LMainObject: TMainObject;
 //  LSubObjectJson: TJSONObject;
   LSubObjectJsonArray: TJSONArray;
+  LSubObjectJsonUtils: IJsonUtils<TSubObject>;
 begin
   FMainObjectList := nil;
 
@@ -155,28 +167,14 @@ begin
     LMainObject.SubObject.SubObjectDesc := LJsonArrayElement.GetValue('SubObject.SubObjectDesc', '');
 
     LSubObjectJsonArray := LJsonArrayElement.GetValue<TJSONArray>('SubObjectList', nil);
-    LMainObject.FSubObjectList := JsonArrayToSubObjectList(LSubObjectJsonArray);
+    LSubObjectJsonUtils := TJsonUtils<TSubObject>.Create;
+    LMainObject.FSubObjectList := LSubObjectJsonUtils.JsonArrayToList(LSubObjectJsonArray);
     FMainObjectList.Add(LMainObject);
   end;
   LJsonValue.Free;
 
   DisplayObjectProperties;
   ResultRichEdit.Lines.Insert(0, 'Completed in ' + IntToStr(LStopWatch.Elapsed.Seconds) + 's');
-end;
-
-function TJsonObjectConverterTestView.JsonArrayToSubObjectList(
-  AJsonArray: TJSONArray
-): IList<TSubObject>;
-var
-  LJsonArrayElement: TJSONValue;
-  LListElementObject: TSubObject;
-begin
-  Result := TCollections.CreateObjectList<TSubObject>;
-  for LJsonArrayElement in AJsonArray do
-  begin
-    LListElementObject := TJson.JsonToObject<TSubObject>(LJsonArrayElement.ToJSON);
-    Result.Add(LListElementObject);
-  end;
 end;
 
 procedure TJsonObjectConverterTestView.DisplayObjectProperties;
@@ -207,6 +205,23 @@ destructor TMainObject.Destroy;
 begin
   FSubObject.Free;
   inherited Destroy;
+end;
+
+{ TJsonUtils<T> }
+
+function TJsonUtils<T>.JsonArrayToList(
+  AJsonArray: TJSONArray
+): IList<T>;
+var
+  LJsonArrayElement: TJSONValue;
+  LListElementObject: T;
+begin
+  Result := TCollections.CreateObjectList<T>;
+  for LJsonArrayElement in AJsonArray do
+  begin
+    LListElementObject := TJson.JsonToObject<T>(LJsonArrayElement.ToJSON);
+    Result.Add(LListElementObject);
+  end;
 end;
 
 end.
